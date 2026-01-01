@@ -1,0 +1,113 @@
+pipeline {
+    agent any
+
+    environment {
+        JAVA_HOME = "C:\\Program Files\\Java\\jdk-11.0.15.1"
+        PATH = "${JAVA_HOME}\\bin;${PATH}"
+
+        MAVEN_HOME = "C:\\ProgramData\\Jenkins\\.jenkins\\tools\\hudson.tasks.Maven_MavenInstallation\\Maven"
+
+        TOMCAT_HOME = "D:\\server\\apache-tomcat-9.0.113"
+        TOMCAT_WEBAPPS_PATH = "${TOMCAT_HOME}\\webapps"
+        TOMCAT_SERVICE_NAME = "Tomcat9"
+    }
+
+    stages {
+
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/LuckyTomar18/Project-03-Jenkins.git', branch: 'main'
+            }
+        }
+
+        stage('Build WAR File') {
+            steps {
+                bat "\"%MAVEN_HOME%\\bin\\mvn.cmd\" clean package -DskipTests -f project_3/pom.xml"
+            }
+        }
+
+        stage('Copy WAR to Tomcat') {
+            steps {
+                bat "rmdir /S /Q \"${TOMCAT_WEBAPPS_PATH}\\project_3\" || exit 0"
+                bat "del /Q \"${TOMCAT_WEBAPPS_PATH}\\project_3.war\" || exit 0"
+                bat "copy /Y \"project_3\\target\\project_3.war\" \"${TOMCAT_WEBAPPS_PATH}\\project_3.war\""
+            }
+        }
+
+        // ✅ NEW STAGE
+        stage('Ensure Tomcat Service') {
+            steps {
+                script {
+                    echo "Ensuring Tomcat service exists..."
+
+                    def status = bat(
+                        script: "sc query ${TOMCAT_SERVICE_NAME}",
+                        returnStatus: true
+                    )
+
+                    if (status != 0) {
+                        error "Tomcat service '${TOMCAT_SERVICE_NAME}' not found! Pipeline stopped."
+                    } else {
+                        echo "Tomcat service '${TOMCAT_SERVICE_NAME}' found."
+                    }
+                }
+            }
+        }
+
+        stage('Restart Tomcat') {
+            steps {
+                script {
+                    def serviceStatus = bat(
+                        script: "sc query ${TOMCAT_SERVICE_NAME}",
+                        returnStdout: true
+                    )
+
+                    if (serviceStatus.contains("RUNNING")) {
+                        echo "Stopping Tomcat..."
+                        bat "sc stop ${TOMCAT_SERVICE_NAME}"
+                        sleep 10
+                    }
+
+                    echo "Starting Tomcat..."
+                    bat "sc start ${TOMCAT_SERVICE_NAME}"
+                    sleep 15
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    def result = bat(
+                        script: 'powershell -Command "try { Invoke-WebRequest -Uri http://localhost:8080/project_3 -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }"',
+                        returnStatus: true
+                    )
+
+                    if (result != 0) {
+                        error "Deployment verification failed!"
+                    } else {
+                        echo "Deployment verified successfully!"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            deleteDir()
+        }
+        success {
+            echo 'Pipeline SUCCESS ✅'
+        }
+        failure {
+            echo 'Pipeline FAILED ❌'
+        }
+    }
+}
