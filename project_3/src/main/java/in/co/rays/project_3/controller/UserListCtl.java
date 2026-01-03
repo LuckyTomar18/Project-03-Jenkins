@@ -176,7 +176,7 @@ public class UserListCtl extends BaseCtl {
 				return;
 			}
 			dto = (UserDTO) populateDTO(request);
-			System.out.println("y yyyyyyyyyy" + dto.getRoleId());
+			
 
 			list = model.search(dto, pageNo, pageSize);
 
@@ -187,9 +187,7 @@ public class UserListCtl extends BaseCtl {
 			ServletUtility.setList(list, request);
 
 			if (list == null || list.size() == 0) {
-				if (!OP_DELETE.equalsIgnoreCase(op)) {
 					ServletUtility.setErrorMessage("No record found ", request);
-				}
 			}
 			if (next == null || next.size() == 0) {
 				request.setAttribute("nextListSize", 0);
@@ -207,7 +205,7 @@ public class UserListCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		} catch (Exception e) {
-// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		log.debug("UserListCtl doGet End");
