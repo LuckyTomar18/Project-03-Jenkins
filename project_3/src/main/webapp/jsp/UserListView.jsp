@@ -79,7 +79,7 @@
 				<div class="col-md-4 alert alert-success alert-dismissible"
 					style="background-color: #80ff80">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<h4>
+					<h4 align="center">
 						<font color="#008000"><%=ServletUtility.getSuccessMessage(request)%></font>
 					</h4>
 				</div>
@@ -96,7 +96,7 @@
 				%>
 				<div class=" col-md-4 alert alert-danger alert-dismissible">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<h4>
+					<h4 align="center">
 						<font color="red"> <%=ServletUtility.getErrorMessage(request)%></font>
 					</h4>
 				</div>

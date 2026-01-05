@@ -132,13 +132,12 @@ public class UserListCtl extends BaseCtl {
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
 
 		UserDTO dto = (UserDTO) populateDTO(request);
+		UserModelInt model = ModelFactory.getInstance().getUserModel();
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
-// get the selected checkbox ids array for delete list
 		String[] ids = request.getParameterValues("ids");
 
-		UserModelInt model = ModelFactory.getInstance().getUserModel();
+
 		try {
 
 			if (OP_SEARCH.equalsIgnoreCase(op) || "Next".equalsIgnoreCase(op) || "Previous".equalsIgnoreCase(op)) {
@@ -175,20 +174,13 @@ public class UserListCtl extends BaseCtl {
 				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 				return;
 			}
-			dto = (UserDTO) populateDTO(request);
-			
-
 			list = model.search(dto, pageNo, pageSize);
-
-			ServletUtility.setDto(dto, request);
 			next = model.search(dto, pageNo + 1, pageSize);
 
-			ServletUtility.setList(list, request);
-			ServletUtility.setList(list, request);
-
 			if (list == null || list.size() == 0) {
-					ServletUtility.setErrorMessage("No record found ", request);
-			}
+				ServletUtility.setErrorMessage("No record found ", request);
+			}	
+			
 			if (next == null || next.size() == 0) {
 				request.setAttribute("nextListSize", 0);
 
