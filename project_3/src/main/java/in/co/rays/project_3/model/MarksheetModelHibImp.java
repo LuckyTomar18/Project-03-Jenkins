@@ -89,14 +89,14 @@ public class MarksheetModelHibImp implements MarksheetModelInt {
 		Session session = null;
 		Transaction tx = null;
 
-		// MarksheetDTO dtoExist = findByRollNo(dto.getRollNo());
+		 MarksheetDTO dtoExist = findByRollNo(dto.getRollNo());
 
 		// Check if updated Roll no already exist
 
-		/*
-		 * if (dtoExist != null && dtoExist.getId() == dto.getId()) { throw new
-		 * DuplicateRecordException("Roll No is already exist"); }
-		 */
+		
+		  if (dtoExist != null && dtoExist.getId() == dto.getId()) { throw new
+		  DuplicateRecordException("Roll No is already exist"); }
+		 
 
 		// get Student Name
 		StudentModelInt sModel = ModelFactory.getInstance().getStudentModel();
@@ -107,8 +107,7 @@ public class MarksheetModelHibImp implements MarksheetModelInt {
 			session = HibDataSource.getSession();
 			tx = session.beginTransaction();
 			session.update(dto);
-			// session.merge(dto);
-			// session.saveOrUpdate(dto);
+			
 			tx.commit();
 
 		} catch (HibernateException e) {

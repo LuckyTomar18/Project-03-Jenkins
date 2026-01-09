@@ -28,8 +28,13 @@
 
 <style type="text/css">
 .aj {
-	background-image: linear-gradient(to bottom right, grey, black);
+	background-image: linear-gradient(135deg, #0b132b, #0f2a44, #09101f, #000);
 }
+
+
+
+
+
 </style>
 </head>
 <body>

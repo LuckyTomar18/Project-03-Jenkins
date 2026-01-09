@@ -9,7 +9,7 @@
 <style>
 .p4 {
 	background-image:
-		url('<%=ORSView.APP_CONTEXT%>/img/avengers.jpg');
+		url('<%=ORSView.APP_CONTEXT%>/img/png.jpg');
 	background-size: 100%;
 	background-repeat: no-repeat;
 }

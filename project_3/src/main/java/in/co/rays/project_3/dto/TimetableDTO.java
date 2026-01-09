@@ -82,12 +82,12 @@ public class TimetableDTO extends BaseDTO
 	
 
 	public String getKey() {
-		// TODO Auto-generated method stub
+		
 		return id+"";
 	}
 
 	public String getValue() {
-		// TODO Auto-generated method stub
+	
 		return subName;
 	}
 

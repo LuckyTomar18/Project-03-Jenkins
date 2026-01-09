@@ -21,12 +21,11 @@ public class HibDataSource {
 		if (sessionFactory == null) {
 			ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.project_3.bundle.system");
 
-            String jdbcUrl = System.getenv("DATABASE_URL");
-            if (jdbcUrl == null || jdbcUrl.trim().isEmpty()) {
-                jdbcUrl = rb.getString("url");
-         }
-
-			sessionFactory = new Configuration().configure().setProperty("hibernate.connection.url", jdbcUrl).buildSessionFactory();
+			/*
+			 * String jdbcUrl = System.getenv("DATABASE_URL"); if (jdbcUrl == null ||
+			 * jdbcUrl.trim().isEmpty()) { jdbcUrl = rb.getString("url"); }
+			 */
+			sessionFactory = new Configuration().configure().buildSessionFactory();
 		}
 		return sessionFactory;
 	}

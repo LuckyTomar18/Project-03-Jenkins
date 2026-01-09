@@ -31,7 +31,6 @@ public class UserModelHibImp implements UserModelInt {
 
 	public long add(UserDTO dto) throws ApplicationException, DuplicateRecordException {
 
-		System.out.println("in addddddddddddd");
 		// TODO Auto-generated method stub
 		/* log.debug("usermodel hib start"); */
 
@@ -47,11 +46,10 @@ public class UserModelHibImp implements UserModelInt {
 			int pk = 0;
 			tx = session.beginTransaction();
 
-			System.out.println("trac1");
 			session.save(dto);
-			System.out.println("trac2");
+
 			tx.commit();
-			System.out.println("trac3");
+
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -94,7 +92,7 @@ public class UserModelHibImp implements UserModelInt {
 		UserDTO existDto = findByLogin(dto.getLogin());
 		// Check if updated LoginId already exist
 		if (existDto != null && existDto.getId() != dto.getId()) {
-			 throw new DuplicateRecordException("LoginId is already exist");
+			throw new DuplicateRecordException("LoginId is already exist");
 		}
 
 		try {
@@ -189,8 +187,6 @@ public class UserModelHibImp implements UserModelInt {
 	public List search(UserDTO dto, int pageNo, int pageSize) throws ApplicationException {
 		// TODO Auto-generated method stub
 
-		System.out.println(
-				"hellllo" + pageNo + "....." + pageSize + "........" + dto.getId() + "......" + dto.getRoleId());
 		Session session = null;
 		ArrayList<UserDTO> list = null;
 		try {
@@ -246,8 +242,7 @@ public class UserModelHibImp implements UserModelInt {
 	}
 
 	public UserDTO authenticate(String login, String password) throws ApplicationException {
-		// TODO Auto-generated method stub
-		System.out.println(login + "kkkkk" + password);
+		
 		Session session = null;
 		UserDTO dto = null;
 		session = HibDataSource.getSession();
