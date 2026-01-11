@@ -13,9 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import org.hibernate.impl.SessionImpl;
 
-import  in.co.rays.project_3.dto.UserDTO;
-import  in.co.rays.project_3.util.HibDataSource;
-import  in.co.rays.project_3.util.JDBCDataSource;
+import in.co.rays.project_3.dto.UserDTO;
+import in.co.rays.project_3.util.HibDataSource;
+import in.co.rays.project_3.util.JDBCDataSource;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -40,12 +40,17 @@ public class JasperCtl extends BaseCtl {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
 
-			ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.project_3.bundle.system");
-			
+		try {
 			/* Compilation of jrxml file */
-			JasperReport jasperReport = JasperCompileManager.compileReport(rb.getString("jasperctl"));
+			ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.project_3.bundle.system");
+
+			String jasperFile = System.getenv("jasperctl");
+			if (jasperFile == null) {
+				jasperFile = rb.getString("jasperctl");
+			}
+
+			JasperReport jasperReport = JasperCompileManager.compileReport(jasperFile);
 
 			HttpSession session = request.getSession(true);
 
@@ -80,7 +85,7 @@ public class JasperCtl extends BaseCtl {
 			response.getOutputStream().flush();
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 

@@ -25,7 +25,7 @@
 }
 
 .p4 {
-	background-image: url('<%=ORSView.APP_CONTEXT%>/img/list2.jpg');
+	background-image: url('<%=ORSView.APP_CONTEXT%>/img/staff.jpg');
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
@@ -61,7 +61,7 @@
 			%>
 			<center>
 				<h1 class="text-light font-weight-bold pt-3">
-					<font color="black"><u>Staff List</u></font>
+					<font color="white"><u>Staff List</u></font>
 				</h1>
 			</center>
 			<div class="row">
@@ -133,9 +133,9 @@
 
 			</br>
 			<div style="margin-bottom: 20px;" class="table-responsive">
-				<table class="table table-dark table-bordered  table-hover">
+				<table class="table table-info table-bordered  table-hover">
 					<thead>
-						<tr style="background-color: #8C8C8C;">
+						<tr style="background-color: #e8e8e8;">
 
 							<th width="10%"><input type="checkbox" id="select_all"
 								name="Select" class="text"> Select All</th>
