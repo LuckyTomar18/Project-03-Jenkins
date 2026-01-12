@@ -59,14 +59,10 @@
 	</background>
 	<title>
 		<band height="144" splitType="Stretch">
-			<image>
-				<reportElement x="0" y="10" width="148" height="60" uuid="62a70009-0408-485f-9b89-688076deb9e8"/>
-				<imageExpression><![CDATA["D:/Project-WorkSpace/Project-03 Workspace/Project-03/project_3/src/main/webapp/img/custom.png"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="181" y="70" width="192" height="50" uuid="6ccf90ce-5ea9-4481-912e-427eeddc773c"/>
 				<textElement>
-					<font size="16"/>
+					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Marksheet Merit List]]></text>
 			</staticText>
