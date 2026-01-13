@@ -180,18 +180,5 @@ public final class ModelFactory {
 		return facultyModel;
 	}
 	
-	public StaffModelInt getStaffModel() {
-		StaffModelInt staffModel = (StaffModelInt) modelCache.get("staffmodel");
-		if (staffModel == null) {
-			if ("Hibernate".equals(DATABASE)) {
-				staffModel = new StaffModelHibImp();
-			}
-			if ("JDBC".equals(DATABASE)) {
-				staffModel = new StaffModelJDBCImp();
-			}
-			modelCache.put("staffModel", staffModel);
-		}
-
-		return staffModel;
-	}
+	
 }
