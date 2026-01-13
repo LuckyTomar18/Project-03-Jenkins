@@ -230,17 +230,7 @@
 							List</a>
 					</div></li>
 					
-					<li class="nav-item dropdown" style="padding-left: 5px"><a
-					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-					role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"> <font style="color: white;">Staff</font>
-				</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="<%=ORSView.STAFF_CTL%>"><i
-							class="fa fa-user-tie"></i>Add Staff</a> <a class="dropdown-item"
-							href="<%=ORSView.STAFF_LIST_CTL%>"><i
-							class="fa fa-user-friends"></i>Staff List</a>
-					</div></li>
+					
 
 				<%
 					}
