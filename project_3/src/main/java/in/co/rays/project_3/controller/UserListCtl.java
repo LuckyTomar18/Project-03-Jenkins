@@ -56,6 +56,7 @@ public class UserListCtl extends BaseCtl {
 
 		dto.setLogin(DataUtility.getString(request.getParameter("login")));
 		dto.setRoleId(DataUtility.getLong(request.getParameter("Role")));
+		dto.setDob(DataUtility.getDate(request.getParameter("dob")));
 		populateBean(dto, request);
 		return dto;
 	}
