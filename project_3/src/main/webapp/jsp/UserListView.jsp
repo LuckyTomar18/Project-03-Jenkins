@@ -21,13 +21,12 @@
 <style>
 .hm {
 	background-image: url('<%=ORSView.APP_CONTEXT%>/img/al.jpg');
-	
 	background-repeat: no-repeat;
-	background-attachment: fixed; 
+	background-attachment: fixed;
 	background-size: cover;
 	padding-top: 85px;
-	
-    /*  background-size: 100%; */
+
+	/*  background-size: 100%; */
 }
 
 .p1 {
@@ -41,9 +40,12 @@
 }
 </style>
 </head>
-<%@include file="Header.jsp"%>
 <body class="hm">
 	<div>
+		<div class="header">
+			<%@include file="Header.jsp"%>
+			<%@include file="calendar.jsp"%>
+		</div>
 		<form class="pb-5" action="<%=ORSView.USER_LIST_CTL%>" method="post">
 			<jsp:useBean id="dto" class="in.co.rays.project_3.dto.UserDTO"
 				scope="request"></jsp:useBean>
@@ -108,7 +110,7 @@
 
 			<div class="row">
 
-				<div class="col-sm-2"></div>
+				<div class="col-sm-1"></div>
 				<div class="col-sm-2">
 					<input type="text" name="firstName" placeholder="Enter FirstName"
 						class="form-control"
@@ -121,7 +123,13 @@
 						value="<%=ServletUtility.getParameter("login", request)%>">
 				</div>
 				&emsp;
-				<div class="col-sm-3"><%=HTMLUtility.getList("Role", String.valueOf(dto.getRoleId()), list1)%></div>
+				<div class="col-sm-2"><%=HTMLUtility.getList("Role", String.valueOf(dto.getRoleId()), list1)%></div>
+				&emsp;
+				<div class="col-sm-2">
+					<input type="text" name="dob" id="datepicker2" placeholder="Enter DOB"
+						class="form-control"
+						value="<%=ServletUtility.getParameter("dob", request)%>">
+				</div>
 
 				<div class="col-sm-2">
 					<input type="submit" class="btn btn-primary btn-md"
