@@ -18,32 +18,40 @@ public class StaffModelHibImp implements StaffModelInt {
 	@Override
 	public long add(StaffDTO dto) throws ApplicationException, DuplicateRecordException {
 
-		Session session = null;
-		Transaction tx = null;
-		long pk = 0;
+	    Session session = null;
+	    Transaction tx = null;
+	    long pk = 0;
 
-		
-		try {
-			session = HibDataSource.getSession();
-			tx = session.beginTransaction();
-			
-			session.save(dto);
-			pk = dto.getId();
-			
-			tx.commit();
-			
-		} catch (Exception e) {
-			
-			if (tx != null) {
-				tx.rollback();
+	    try {
+	        session = HibDataSource.getSession();
+	        tx = session.beginTransaction();
 
-			}
-			throw new ApplicationException("Exception in Staff Add " + e.getMessage());
-		} finally {
-			session.close();
-		}
-		return pk;
+	        session.save(dto);
+	        pk = dto.getId();
+
+	        tx.commit();
+
+	    } catch (Exception e) {
+
+	        //  SAFE rollback
+	        try {
+	            if (tx != null && tx.isActive()) {
+	                tx.rollback();
+	            }
+	        } catch (Exception rbEx) {
+	            // DB already down, ignore rollback failure
+	        }
+
+	        throw new ApplicationException("Database is down, please try later"+ e);
+
+	    } finally {
+	        if (session != null) {
+	            session.close();
+	        }
+	    }
+	    return pk;
 	}
+
 
 	@Override
 	public void delete(StaffDTO dto) throws ApplicationException {
