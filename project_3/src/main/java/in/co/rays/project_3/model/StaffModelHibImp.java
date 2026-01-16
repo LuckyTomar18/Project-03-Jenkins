@@ -20,14 +20,20 @@ public class StaffModelHibImp implements StaffModelInt {
 
 		Session session = null;
 		Transaction tx = null;
+		long pk = 0;
 
+		
 		try {
 			session = HibDataSource.getSession();
 			tx = session.beginTransaction();
+			
 			session.save(dto);
+			pk = dto.getId();
+			
 			tx.commit();
+			
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			
 			if (tx != null) {
 				tx.rollback();
 
@@ -36,7 +42,7 @@ public class StaffModelHibImp implements StaffModelInt {
 		} finally {
 			session.close();
 		}
-		return dto.getId();
+		return pk;
 	}
 
 	@Override
@@ -155,4 +161,4 @@ public class StaffModelHibImp implements StaffModelInt {
 	
 
 	
-	
+	 	
