@@ -18,6 +18,9 @@ public final class ModelFactory {
 	private static ModelFactory mFactory = null;
 	private static HashMap modelCache = new HashMap();
 
+	/**
+	 * Make Default Constructor Private
+	 */
 	private ModelFactory() {
 
 	}

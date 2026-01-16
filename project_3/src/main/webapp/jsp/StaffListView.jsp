@@ -36,8 +36,9 @@
 </style>
 </head>
 <body class="p4">
-	<div>
+	<div class="header">
 		<%@include file="Header.jsp"%>
+		<%@include file="calendar.jsp"%>
 	</div>
 	<div>
 		<form action="<%=ORSView.STAFF_LIST_CTL%>" method="post">

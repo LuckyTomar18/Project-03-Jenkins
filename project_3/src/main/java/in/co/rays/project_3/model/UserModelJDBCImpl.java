@@ -53,7 +53,7 @@ public class UserModelJDBCImpl implements UserModelInt {
 	}
 
 	public long add(UserDTO dto) throws ApplicationException, DuplicateRecordException {
-		System.out.println("hellllo");
+		
 		log.debug("user add is started");
 		Connection con = null;
 		long pk = 0;
@@ -66,7 +66,7 @@ public class UserModelJDBCImpl implements UserModelInt {
 			con = JDBCDataSource.getConnection();
 			con.setAutoCommit(false);
 			pk = nextPK();
-			System.out.println("insert data");
+			
 			PreparedStatement ps = con
 					.prepareStatement("insert into ST_USERdto values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			ps.setLong(1, pk);
@@ -88,7 +88,7 @@ public class UserModelJDBCImpl implements UserModelInt {
 			ps.setTimestamp(17, dto.getCreatedDatetime());
 			ps.setTimestamp(18, dto.getModifiedDatetime());
 			ps.executeUpdate();
-			System.out.println("data insert successfully" + pk);
+			
 			con.commit();
 			con.close();
 		} catch (Exception e) {

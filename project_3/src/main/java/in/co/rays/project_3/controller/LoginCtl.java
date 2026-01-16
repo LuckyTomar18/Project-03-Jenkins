@@ -135,7 +135,7 @@ public class LoginCtl extends BaseCtl {
 				dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
 				if (dto != null) {
 					session.setAttribute("user", dto);
-					
+
 					RoleDTO rdto = model1.findByPK(dto.getRoleId());
 					if (rdto != null) {
 						session.setAttribute("role", rdto.getName());
@@ -161,12 +161,11 @@ public class LoginCtl extends BaseCtl {
 					ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
 				}
 
-			} catch (ApplicationException | JDBCConnectionException e1) {
-				System.out.println("in catch block ==================>>>>>>>>> ");
+			} catch (ApplicationException  | JDBCConnectionException  e1) {
+
 				log.error(e1);
-//				ServletUtility.handleException(e, request, response);
-				ServletUtility.setErrorMessage("YOUR MYSQL CONTAINER IS OFF COMMUNICTAION LINK FAILURE!", request);
-				ServletUtility.forward(getView(), request, response);
+			ServletUtility.handleException(e1, request, response);
+
 				return;
 			}
 

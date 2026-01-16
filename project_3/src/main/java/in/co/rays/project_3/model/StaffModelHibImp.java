@@ -8,9 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import in.co.rays.project_3.dto.CollegeDTO;
 import in.co.rays.project_3.dto.StaffDTO;
-import in.co.rays.project_3.dto.UserDTO;
 import in.co.rays.project_3.exception.ApplicationException;
 import in.co.rays.project_3.exception.DuplicateRecordException;
 import in.co.rays.project_3.util.HibDataSource;
@@ -158,4 +156,3 @@ public class StaffModelHibImp implements StaffModelInt {
 
 	
 	
-

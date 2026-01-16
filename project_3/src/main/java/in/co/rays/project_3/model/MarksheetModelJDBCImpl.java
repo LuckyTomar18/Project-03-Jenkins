@@ -308,7 +308,6 @@ public class MarksheetModelJDBCImpl implements MarksheetModelInt {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				System.out.println("heiuiujiou");
 				dto = new MarksheetDTO();
 				dto.setId(rs.getLong(1));
 				dto.setRollNo(rs.getString(2));

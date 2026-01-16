@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import in.co.rays.project_3.util.ServletUtility;
 
@@ -28,7 +29,13 @@ public class ErrorCtl extends BaseCtl{
      */
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException{
 		
+		
+		HttpSession session = request.getSession(true);
+		session = request.getSession();
+		session.invalidate();
+		ServletUtility.setErrorMessage("Database server Down", request);
 		ServletUtility.forward(getView(), request, response);
+		
 		
 	}
 	 /**
@@ -43,7 +50,7 @@ public class ErrorCtl extends BaseCtl{
  }
 	@Override
 	protected String getView() {
-		return ORSView.ERROR_VIEW;
+		return ORSView.LOGIN_VIEW;
 	}
 
 }
