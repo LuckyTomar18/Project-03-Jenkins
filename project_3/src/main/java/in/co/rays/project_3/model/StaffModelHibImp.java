@@ -32,7 +32,7 @@ public class StaffModelHibImp implements StaffModelInt {
 			
 			tx.commit();
 			
-		} catch (HibernateException e) {
+		} catch (Exception e) {
 			
 			if (tx != null) {
 				tx.rollback();
