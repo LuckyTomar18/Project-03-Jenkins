@@ -1,6 +1,7 @@
 package in.co.rays.project_3.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,28 +39,24 @@ public class UserCtl extends BaseCtl {
 
 	private static Logger log = Logger.getLogger(UserCtl.class);
 
+	@Override
 	protected void preload(HttpServletRequest request) {
 
+		System.out.println(">>> UserCtl preload called");
+
 		RoleModelInt model = ModelFactory.getInstance().getRoleModel();
+		List list;
 
 		try {
-			List list = model.list();
-			Iterator it = list.iterator();
-
-			while (it.hasNext()) {
-				RoleDTO dto = (RoleDTO) it.next();
-				System.out.println(dto.getId());
-				System.out.println(dto.getName());
-				System.out.println(dto.getDescription());
-
-			}
-
-			request.setAttribute("roleList", list);
+			list = model.list();
+			System.out.println("Roles size = " + list.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			list = new java.util.ArrayList();
 		}
 
+		request.setAttribute("roleList", list);
 	}
 
 	protected boolean validate(HttpServletRequest request) {
@@ -137,7 +134,7 @@ public class UserCtl extends BaseCtl {
 			request.setAttribute("confirmPassword", "Confirm  Password  should  be matched.");
 			pass = false;
 		}
-		
+
 		return pass;
 
 	}
@@ -146,6 +143,10 @@ public class UserCtl extends BaseCtl {
 
 		UserDTO dto = new UserDTO();
 
+		System.out.println(request.getParameter("dob"));
+		System.out.println("Populate end " + "................" + request.getParameter("id"));
+		System.out.println("-------------------------------------------" + request.getParameter("password"));
+		System.out.println(request.getParameter("confirmPassword"));
 
 		dto.setId(DataUtility.getLong(request.getParameter("id")));
 
@@ -166,7 +167,7 @@ public class UserCtl extends BaseCtl {
 
 		populateBean(dto, request);
 
-		
+		System.out.println(request.getParameter("dob") + "......." + dto.getDob());
 		log.debug("UserRegistrationCtl Method populatedto Ended");
 
 		return dto;
@@ -178,17 +179,13 @@ public class UserCtl extends BaseCtl {
 
 		log.debug("UserCtl Method doGet Started");
 
-		String op = DataUtility.getString(request.getParameter("operation"));
-
 		// get model
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 
-		if (id > 0 || op != null) {
-			
-			UserDTO dto = null;
+		if (id > 0) {
 			try {
-				dto = model.findByPK(id);
+				UserDTO dto = model.findByPK(id);
 				ServletUtility.setDto(dto, request);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -204,57 +201,35 @@ public class UserCtl extends BaseCtl {
 			throws IOException, ServletException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
-		// get model
 		UserModelInt model = ModelFactory.getInstance().getUserModel();
-
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		if (OP_SAVE.equalsIgnoreCase(op) || OP_UPDATE.equalsIgnoreCase(op)) {
 
 			UserDTO dto = (UserDTO) populateDTO(request);
 
-			System.out.println(" in do post method jkjjkjk++++++++" + dto.getId());
-
 			try {
+
 				if (id > 0) {
 					model.update(dto);
 					ServletUtility.setSuccessMessage("Data is successfully Updated", request);
 				} else {
-
-					try {
-						model.add(dto);
-						ServletUtility.setSuccessMessage("Data is successfully saved", request);
-					} catch (ApplicationException e) {
-						log.error(e);
-						ServletUtility.handleException(e, request, response);
-						return;
-					} catch (DuplicateRecordException e) {
-						ServletUtility.setDto(dto, request);
-						ServletUtility.setErrorMessage("Login id already exists", request);
-					}
-
+					model.add(dto);
+					ServletUtility.setSuccessMessage("Data is successfully saved", request);
 				}
+
 				ServletUtility.setDto(dto, request);
 
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
 			} catch (DuplicateRecordException e) {
+
 				ServletUtility.setDto(dto, request);
 				ServletUtility.setErrorMessage("Login id already exists", request);
-			}
-		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
-			UserDTO dto = (UserDTO) populateDTO(request);
-			try {
-				model.delete(dto);
-				ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
-				return;
 			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
+
+				log.error("Database down", e);
+
+				ServletUtility.redirect(ORSView.ERROR_CTL, request, response);
 				return;
 			}
 
@@ -262,14 +237,14 @@ public class UserCtl extends BaseCtl {
 
 			ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 			return;
+
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
 
 			ServletUtility.redirect(ORSView.USER_CTL, request, response);
 			return;
 		}
-		ServletUtility.forward(getView(), request, response);
 
-		log.debug("UserCtl Method doPostEnded");
+		ServletUtility.forward(getView(), request, response);
 	}
 
 	@Override
