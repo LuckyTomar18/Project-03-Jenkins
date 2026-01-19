@@ -185,7 +185,7 @@ public class UserCtl extends BaseCtl {
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		if (id > 0 || op != null) {
-			System.out.println("in id > 0  condition");
+			
 			UserDTO dto = null;
 			try {
 				dto = model.findByPK(id);

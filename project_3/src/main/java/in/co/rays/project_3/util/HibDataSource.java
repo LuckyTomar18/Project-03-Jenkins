@@ -26,9 +26,8 @@ public class HibDataSource {
             }
            
             
-            sessionFactory = new Configuration().configure()
-            		.setProperty("hibernate.connection.url", jdbcUrl).buildSessionFactory();		}
-		return sessionFactory;
+            sessionFactory = new Configuration().configure().setProperty("hibernate.connection.url", jdbcUrl).buildSessionFactory();		}
+	             	return sessionFactory;
 	}
 
 	public static Session getSession() {
