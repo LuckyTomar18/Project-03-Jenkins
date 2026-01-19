@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.JDBCConnectionException;
 
 import in.co.rays.project_3.dto.RoleDTO;
 import in.co.rays.project_3.exception.ApplicationException;
@@ -15,19 +16,19 @@ import in.co.rays.project_3.util.HibDataSource;
 
 /**
  * Hibernate implements of Role model
+ * 
  * @author Lucky
  *
  */
-public class RoleModelHibImp implements RoleModelInt{
+public class RoleModelHibImp implements RoleModelInt {
 
 	public long add(RoleDTO dto) throws ApplicationException, DuplicateRecordException {
-		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction tx = null;
 		long pk = 0;
 
 		RoleDTO existDto = findByName(dto.getName());
-		
+
 		if (existDto != null) {
 			throw new DuplicateRecordException("Role already exist");
 		}
@@ -99,11 +100,10 @@ public class RoleModelHibImp implements RoleModelInt{
 
 	public List list() throws ApplicationException {
 		// TODO Auto-generated method stub
-		return list(0,0);
+		return list(0, 0);
 	}
 
 	public List list(int pageNo, int pageSize) throws ApplicationException {
-		// TODO Auto-generated method stub
 		Session session = null;
 		List list = null;
 		try {
@@ -115,6 +115,8 @@ public class RoleModelHibImp implements RoleModelInt{
 				criteria.setMaxResults(pageSize);
 			}
 			list = criteria.list();
+		} catch (JDBCConnectionException e) {
+			throw e;
 		} catch (HibernateException e) {
 
 			throw new ApplicationException("Exception : Exception in  role list");
@@ -126,43 +128,43 @@ public class RoleModelHibImp implements RoleModelInt{
 
 	public List search(RoleDTO dto) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return search(dto,0,0);
+		return search(dto, 0, 0);
 	}
 
 	public List search(RoleDTO dto, int pageNo, int pageSize) throws ApplicationException {
 		// TODO Auto-generated method stub
-		Session session=null;
-		List list=null;
+		Session session = null;
+		List list = null;
 		try {
-			session=HibDataSource.getSession();
-			Criteria criteria=session.createCriteria(RoleDTO.class);
-			if(dto.getId()>0){
+			session = HibDataSource.getSession();
+			Criteria criteria = session.createCriteria(RoleDTO.class);
+			if (dto.getId() > 0) {
 				criteria.add(Restrictions.eq("id", dto.getId()));
 			}
-			if(dto.getName()!=null&& dto.getName().length()>0){
-				criteria.add(Restrictions.like("name", dto.getName()+"%"));
+			if (dto.getName() != null && dto.getName().length() > 0) {
+				criteria.add(Restrictions.like("name", dto.getName() + "%"));
 			}
-			if(dto.getDescription()!=null&& dto.getDescription().length()>0){
-				criteria.add(Restrictions.like("description", dto.getDescription()+"%"));
+			if (dto.getDescription() != null && dto.getDescription().length() > 0) {
+				criteria.add(Restrictions.like("description", dto.getDescription() + "%"));
 			}
-			if(pageSize>0){
-				criteria.setFirstResult((pageNo-1)*pageSize);
+			if (pageSize > 0) {
+				criteria.setFirstResult((pageNo - 1) * pageSize);
 				criteria.setMaxResults(pageSize);
 			}
-			list=criteria.list();
+			list = criteria.list();
 		} catch (HibernateException e) {
-            
-            throw new ApplicationException("Exception in course search");
-        } finally {
-            session.close();
-        }
+
+			throw new ApplicationException("Exception in course search");
+		} finally {
+			session.close();
+		}
 		return list;
 	}
 
 	public RoleDTO findByPK(long pk) throws ApplicationException {
 		// TODO Auto-generated method stub
 		Session session = HibDataSource.getSession();
-		
+
 		try {
 			RoleDTO dto = (RoleDTO) session.get(RoleDTO.class, pk);
 			return dto;
@@ -171,7 +173,7 @@ public class RoleModelHibImp implements RoleModelInt{
 		} finally {
 			session.close();
 		}
-		
+
 	}
 
 	public RoleDTO findByName(String name) throws ApplicationException {
@@ -183,7 +185,7 @@ public class RoleModelHibImp implements RoleModelInt{
 			Criteria criteria = session.createCriteria(RoleDTO.class);
 			criteria.add(Restrictions.eq("name", name));
 			List list = criteria.list();
-			
+
 			if (list.size() > 0) {
 				dto = (RoleDTO) list.get(0);
 			}
