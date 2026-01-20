@@ -130,12 +130,6 @@ public interface ORSView {
 
 	public String MARKSHEET_MERIT_LIST_CTL = APP_CONTEXT + "/ctl/MarksheetMeritListCtl";
 	
-	public String STAFF__VIEW = PAGE_FOLDER + "/StaffView.jsp";
-	
-	public String STAFF_CTL = APP_CONTEXT + "/ctl/StaffCtl";
-	
-	public String STAFF__LIST_VIEW = PAGE_FOLDER + "/StaffListView.jsp";
-	
-	public String STAFF_LIST_CTL = APP_CONTEXT + "/ctl/StaffListCtl";
+
 
 }
