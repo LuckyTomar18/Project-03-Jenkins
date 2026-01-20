@@ -216,7 +216,7 @@
 						</a>
 					</div></li>
 
-				<li class="nav-item dropdown" style="padding-left: 5px"><a
+				<%-- <li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"> <font style="color: white;">Product
@@ -228,7 +228,7 @@
 							class="fa fa-file"></i>Add Product</a> <a class="dropdown-item"
 							href="<%=ORSView.PRODUCT_LIST_CTL%>"><i class="fa fa-paste"></i>Product
 							List</a>
-					</div></li>
+					</div></li> --%>
 					
 					<li class="nav-item dropdown" style="padding-left: 5px"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"

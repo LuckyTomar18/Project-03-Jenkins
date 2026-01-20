@@ -80,12 +80,6 @@ public class UserCtl extends BaseCtl {
 
 				RoleDTO dto = (RoleDTO) it.next();
 
-				System.out.println(dto.getId());
-
-				System.out.println(dto.getName());
-
-				System.out.println(dto.getDescription());
-
 			}
 
 			request.setAttribute("roleList", list);
@@ -247,14 +241,6 @@ public class UserCtl extends BaseCtl {
 
 		UserDTO dto = new UserDTO();
 
-		System.out.println(request.getParameter("dob"));
-
-		System.out.println("Populate end " + "................" + request.getParameter("id"));
-
-		System.out.println("-------------------------------------------" + request.getParameter("password"));
-
-		System.out.println(request.getParameter("confirmPassword"));
-
 		dto.setId(DataUtility.getLong(request.getParameter("id")));
 
 		dto.setRoleId(DataUtility.getLong(request.getParameter("role")));
@@ -277,7 +263,6 @@ public class UserCtl extends BaseCtl {
 
 		populateBean(dto, request);
 
-		System.out.println(request.getParameter("dob") + "......." + dto.getDob());
 
 		log.debug("UserRegistrationCtl Method populatedto Ended");
 
@@ -345,7 +330,6 @@ public class UserCtl extends BaseCtl {
 
 			UserDTO dto = (UserDTO) populateDTO(request);
 
-			System.out.println(" in do post method jkjjkjk++++++++" + dto.getId());
 
 			try {
 

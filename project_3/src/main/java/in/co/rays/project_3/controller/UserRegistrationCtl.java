@@ -103,7 +103,6 @@ public class UserRegistrationCtl extends BaseCtl {
 			request.setAttribute("confirmPassword", "Confirm Password should be matched");
 			pass = false;
 		}
-		System.out.println("validate end " + pass);
 
 		return pass;
 	}
