@@ -33,7 +33,8 @@ public class ErrorCtl extends BaseCtl{
 		HttpSession session = request.getSession(true);
 		session = request.getSession();
 		session.invalidate();
-		ServletUtility.setErrorMessage("Database server Down", request);
+		response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE); //503
+		ServletUtility.setErrorMessage("Database server is temporarily down, please try again later", request);
 		ServletUtility.forward(getView(), request, response);
 		
 		
