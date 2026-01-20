@@ -154,7 +154,7 @@ i.css {
 
 
 
-								<span class="pl-sm-5"><b>DOB</b> <span
+								<span class="pl-sm-5"><b>Joining Date</b> <span
 									style="color: red;">*</span></span></br>
 								<div class="col-sm-12">
 									<div class="input-group">
@@ -164,7 +164,7 @@ i.css {
 											</div>
 										</div>
 										<input type="text" id="datepicker2" name="joiningDate"
-											class="form-control" placeholder="Date Of Birth"
+											class="form-control" placeholder="Enter Joining Date"
 											readonly="readonly"
 											value="<%=DataUtility.getDateString(dto.getJoiningDate())%>">
 									</div>
