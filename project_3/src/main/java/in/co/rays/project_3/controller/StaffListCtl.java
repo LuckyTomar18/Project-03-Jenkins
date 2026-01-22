@@ -93,10 +93,7 @@ public class StaffListCtl extends BaseCtl {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
+		} 
 		log.debug("StaffListCtl doGet End");
 	}
 	
