@@ -48,7 +48,7 @@ public class ErrorCtl extends BaseCtl {
 
         // ===== ERROR MESSAGE =====
         ServletUtility.setErrorMessage(
-                "⚠ Database service is unavailable. Please start MySQL and try again.",
+                " Database service is Down.",
                 request);
 
         // ===== LIST PAGE SAFETY =====
@@ -134,6 +134,9 @@ public class ErrorCtl extends BaseCtl {
 
         if (ctl.contains("UserCtl"))
             return ORSView.USER_VIEW;
+        
+        if (ctl.contains("LoginCtl"))
+            return ORSView.LOGIN_VIEW;
 
         // ===== DEFAULT ERROR =====
         return ORSView.ERROR_VIEW;

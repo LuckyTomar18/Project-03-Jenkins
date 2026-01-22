@@ -127,29 +127,30 @@ public class LoginCtl extends BaseCtl {
 		HttpSession session = request.getSession(true);
 
 		UserModelInt userModel = ModelFactory.getInstance().getUserModel();
-		RoleModelInt model1 = ModelFactory.getInstance().getRoleModel();
+		RoleModelInt rolemodel = ModelFactory.getInstance().getRoleModel();
 
 		if (OP_SIGN_IN.equalsIgnoreCase(op)) {
+
 			UserDTO dto = (UserDTO) populateDTO(request);
+
 			try {
 				dto = userModel.authenticate(dto.getLogin(), dto.getPassword());
+
 				if (dto != null) {
+
 					session.setAttribute("user", dto);
 
-					RoleDTO rdto = model1.findByPK(dto.getRoleId());
-					if (rdto != null) {
-						session.setAttribute("role", rdto.getName());
+					RoleDTO roledto = rolemodel.findByPK(dto.getRoleId());
+
+					if (roledto != null) {
+
+						session.setAttribute("role", roledto.getName());
 					}
 					String uri = (String) request.getParameter("uri");
+
 					if (uri == null || "null".equalsIgnoreCase(uri)) {
+
 						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-						return;
-					} else {
-						if (rdto.getId() == 1) {
-							ServletUtility.redirect(uri, request, response);
-						} else {
-							ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-						}
 
 						return;
 					}
@@ -160,11 +161,9 @@ public class LoginCtl extends BaseCtl {
 					ServletUtility.setErrorMessage("Invalid LoginId And Password!", request);
 				}
 
-			} catch (ApplicationException  | JDBCConnectionException  e1) {
-
+			} catch (ApplicationException | JDBCConnectionException e1) {
 				log.error(e1);
-			ServletUtility.handleException(e1, request, response);
-
+				ServletUtility.handleException(e1, request, response);
 				return;
 			}
 

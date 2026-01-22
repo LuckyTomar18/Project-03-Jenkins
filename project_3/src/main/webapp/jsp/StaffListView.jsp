@@ -198,7 +198,7 @@
 					System.out.println("user list view list.size==0");
 			%>
 			<center>
-				<h1 class="text-primary font-weight-bold pt-3">College List</h1>
+				<h1 class="text-primary font-weight-bold pt-3">Staff List</h1>
 			</center>
 			</br>
 			<div class="row">
