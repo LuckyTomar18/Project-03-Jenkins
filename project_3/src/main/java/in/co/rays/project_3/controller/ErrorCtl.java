@@ -1,149 +1,219 @@
 package in.co.rays.project_3.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
+import java.util.List;
 
 import javax.servlet.ServletException;
+
 import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
+
+import javax.servlet.http.HttpSession;
+
+import in.co.rays.project_3.dto.BaseDTO;
+
+import in.co.rays.project_3.exception.ApplicationException;
 
 import in.co.rays.project_3.util.ServletUtility;
 
 /**
- * Global Error Controller
- * Handles DB down / runtime exceptions safely
+ * 
+ * Error functionality controller.perform error page operation
+ * 
+ * 
  * 
  * @author Lucky
+ *
+ * 
+ * 
  */
+
 @WebServlet(name = "ErrorCtl", urlPatterns = { "/ErrorCtl" })
+
 public class ErrorCtl extends BaseCtl {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        process(request, response);
-    }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        process(request, response);
-    }
+			throws IOException, ServletException {
 
-    private void process(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+		process(request, response);
 
-        // ===== HTTP STATUS =====
-        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE); // 503
+	}
 
-        // ===== FIND LAST CONTROLLER =====
-        String lastCtl = (String) request.getAttribute("lastCtl");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
-        if (lastCtl == null) {
-            lastCtl = (String) request.getAttribute("javax.servlet.error.request_uri");
-        }
+			throws IOException, ServletException {
 
-        System.out.println("Error on controller : " + lastCtl);
+		process(request, response);
 
-        // ===== ERROR MESSAGE =====
-        ServletUtility.setErrorMessage(
-                " Database service is Down.",
-                request);
+	}
 
-        // ===== LIST PAGE SAFETY =====
-        if (lastCtl != null && lastCtl.contains("ListCtl")) {
+	private void process(HttpServletRequest request, HttpServletResponse response)
 
-            if (ServletUtility.getList(request) == null) {
-                ServletUtility.setList(new ArrayList<>(), request);
-            }
+			throws IOException, ServletException {
 
-            request.setAttribute("pageNo", 1);
-            request.setAttribute("pageSize", 10);
-            request.setAttribute("nextListSize", 0);
-        }
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
 
-        // ===== RESOLVE VIEW =====
-        String view = getViewFromCtl(lastCtl);
+		String lastCtl = (String) request.getAttribute("javax.servlet.error.request_uri");
 
-        // ===== ALWAYS FORWARD TO JSP (NEVER CTL) =====
-        ServletUtility.forward(view, request, response);
-    }
+		String view = getViewFromCtl(lastCtl);
 
-    /**
-     * Resolve JSP view from controller
-     */
-    private String getViewFromCtl(String ctl) {
+		ServletUtility.setErrorMessage("Database server down please check!!!", request);
 
-        if (ctl == null) {
-            return ORSView.ERROR_VIEW;
-        }
+		if (lastCtl != null && lastCtl.contains("ListCtl")) {
 
-        // ===== LIST VIEWS (PRIORITY) =====
-        if (ctl.contains("StaffListCtl"))
-            return ORSView.STAFF__LIST_VIEW;
+			if (ServletUtility.getList(request) == null) {
 
-        if (ctl.contains("CollegeListCtl"))
-            return ORSView.COLLEGE_LIST_VIEW;
+				ServletUtility.setList(new java.util.ArrayList(), request);
 
-        if (ctl.contains("StudentListCtl"))
-            return ORSView.STUDENT_LIST_VIEW;
+			}
 
-        if (ctl.contains("FacultyListCtl"))
-            return ORSView.FACULTY_LIST_VIEW;
+			request.setAttribute("pageNo", 1);
 
-        if (ctl.contains("CourseListCtl"))
-            return ORSView.COURSE_LIST_VIEW;
+			request.setAttribute("pageSize", 10);
 
-        if (ctl.contains("SubjectListCtl"))
-            return ORSView.SUBJECT_LIST_VIEW;
+			request.setAttribute("nextListSize", 0);
 
-        if (ctl.contains("RoleListCtl"))
-            return ORSView.ROLE_LIST_VIEW;
+		}
 
-        if (ctl.contains("UserListCtl"))
-            return ORSView.USER_LIST_VIEW;
+		ServletUtility.forward(view, request, response);
 
-        if (ctl.contains("MarksheetListCtl"))
-            return ORSView.MARKSHEET_LIST_VIEW;
+	}
 
-        if (ctl.contains("MarksheetMeritListCtl"))
-            return ORSView.MARKSHEET_MERIT_LIST_VIEW;
+	private String getViewFromCtl(String ctl) {
 
-        // ===== FORM VIEWS =====
-        if (ctl.contains("StaffCtl"))
-            return ORSView.STAFF__VIEW;
+		if (ctl == null)
 
-        if (ctl.contains("CollegeCtl"))
-            return ORSView.COLLEGE_VIEW;
+			return ORSView.ERROR_VIEW;
 
-        if (ctl.contains("StudentCtl"))
-            return ORSView.STUDENT_VIEW;
+		if (ctl.endsWith(ORSView.USER_CTL))
 
-        if (ctl.contains("FacultyCtl"))
-            return ORSView.FACULTY_VIEW;
+			return ORSView.USER_VIEW;
 
-        if (ctl.contains("CourseCtl"))
-            return ORSView.COURSE_VIEW;
+		if (ctl.endsWith(ORSView.ROLE_CTL))
 
-        if (ctl.contains("SubjectCtl"))
-            return ORSView.SUBJECT_VIEW;
+			return ORSView.ROLE_VIEW;
 
-        if (ctl.contains("RoleCtl"))
-            return ORSView.ROLE_VIEW;
+		if (ctl.endsWith(ORSView.COLLEGE_CTL))
 
-        if (ctl.contains("UserCtl"))
-            return ORSView.USER_VIEW;
-        
-        if (ctl.contains("LoginCtl"))
-            return ORSView.LOGIN_VIEW;
+			return ORSView.COLLEGE_VIEW;
 
-        // ===== DEFAULT ERROR =====
-        return ORSView.ERROR_VIEW;
-    }
+		if (ctl.endsWith(ORSView.STUDENT_CTL))
 
-    @Override
-    protected String getView() {
-        return ORSView.ERROR_VIEW;
-    }
+			return ORSView.STUDENT_VIEW;
+
+		if (ctl.endsWith(ORSView.FACULTY_CTL))
+
+			return ORSView.FACULTY_VIEW;
+
+		if (ctl.endsWith(ORSView.COURSE_CTL))
+
+			return ORSView.COURSE_VIEW;
+
+		if (ctl.endsWith(ORSView.SUBJECT_CTL))
+
+			return ORSView.SUBJECT_VIEW;
+
+		if (ctl.endsWith(ORSView.TIMETABLE_CTL))
+
+			return ORSView.TIMETABLE_VIEW;
+
+		if (ctl.endsWith(ORSView.STAFF_CTL))
+
+			return ORSView.STAFF__VIEW;
+
+		if (ctl.endsWith(ORSView.MARKSHEET_CTL))
+
+			return ORSView.MARKSHEET_VIEW;
+
+		if (ctl.endsWith(ORSView.GET_MARKSHEET_CTL))
+
+			return ORSView.GET_MARKSHEET_VIEW;
+
+		if (ctl.endsWith(ORSView.CHANGE_PASSWORD_CTL))
+
+			return ORSView.CHANGE_PASSWORD_VIEW;
+
+		if (ctl.endsWith(ORSView.MY_PROFILE_CTL))
+
+			return ORSView.MY_PROFILE_VIEW;
+
+		if (ctl.endsWith(ORSView.FORGET_PASSWORD_CTL))
+
+			return ORSView.FORGET_PASSWORD_VIEW;
+
+		if (ctl.endsWith(ORSView.LOGIN_CTL))
+
+			return ORSView.LOGIN_VIEW;
+
+		if (ctl.endsWith(ORSView.WELCOME_CTL))
+
+			return ORSView.WELCOME_VIEW;
+
+		if (ctl.endsWith(ORSView.USER_REGISTRATION_CTL))
+
+			return ORSView.USER_REGISTRATION_VIEW;
+
+		// ===== LIST PAGES =====
+
+		if (ctl.endsWith(ORSView.USER_LIST_CTL))
+
+			return ORSView.USER_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.ROLE_LIST_CTL))
+
+			return ORSView.ROLE_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.COLLEGE_LIST_CTL))
+
+			return ORSView.COLLEGE_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.STUDENT_LIST_CTL))
+
+			return ORSView.STUDENT_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.FACULTY_LIST_CTL))
+
+			return ORSView.FACULTY_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.COURSE_LIST_CTL))
+
+			return ORSView.COURSE_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.SUBJECT_LIST_CTL))
+
+			return ORSView.SUBJECT_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.TIMETABLE_LIST_CTL))
+
+			return ORSView.TIMETABLE_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.STAFF_LIST_CTL))
+
+			return ORSView.STAFF__LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.MARKSHEET_LIST_CTL))
+
+			return ORSView.MARKSHEET_LIST_VIEW;
+
+		if (ctl.endsWith(ORSView.MARKSHEET_MERIT_LIST_CTL))
+
+			return ORSView.MARKSHEET_MERIT_LIST_VIEW;
+
+		return ORSView.ERROR_VIEW;
+
+	}
+
+	@Override
+
+	protected String getView() {
+
+		return ORSView.LOGIN_VIEW;
+
+	}
+
 }
