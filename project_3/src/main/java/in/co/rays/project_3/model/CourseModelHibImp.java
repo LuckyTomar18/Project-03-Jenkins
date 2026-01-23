@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.JDBCConnectionException;
 
 import in.co.rays.project_3.dto.CourseDTO;
 import in.co.rays.project_3.exception.ApplicationException;
@@ -15,6 +16,7 @@ import in.co.rays.project_3.util.HibDataSource;
 
 /**
  * Hibernate implements of course model
+ * 
  * @author Lucky
  *
  */
@@ -97,7 +99,7 @@ public class CourseModelHibImp implements CourseModelInt {
 
 	public CourseDTO findByPK(long pk) throws ApplicationException {
 		// TODO Auto-generated method stub
-		System.out.println("======"+pk);
+		System.out.println("======" + pk);
 		Session session = null;
 		CourseDTO dto = null;
 		try {
@@ -110,7 +112,7 @@ public class CourseModelHibImp implements CourseModelInt {
 		} finally {
 			session.close();
 		}
-		System.out.println("-------"+dto);
+		System.out.println("-------" + dto);
 		return dto;
 	}
 
@@ -154,6 +156,8 @@ public class CourseModelHibImp implements CourseModelInt {
 				criteria.setMaxResults(pageSize);
 			}
 			list = criteria.list();
+		} catch (JDBCConnectionException e) {
+			throw e;
 		} catch (HibernateException e) {
 
 			throw new ApplicationException("Exception : Exception in  course list");
@@ -170,43 +174,40 @@ public class CourseModelHibImp implements CourseModelInt {
 
 	public List search(CourseDTO dto, int pageNo, int pageSize) throws ApplicationException {
 		// TODO Auto-generated method stub
-		  Session session = null;
-	        List list = null;
-	        try {
-	            session = HibDataSource.getSession();
-	            Criteria criteria = session.createCriteria(CourseDTO.class);
+		Session session = null;
+		List list = null;
+		try {
+			session = HibDataSource.getSession();
+			Criteria criteria = session.createCriteria(CourseDTO.class);
 
-	            if (dto.getId() > 0) {
-	                criteria.add(Restrictions.eq("id", dto.getId()));
-	            }
-	            if (dto.getCourseName() != null && dto.getCourseName().length() > 0) {
-	                criteria.add(Restrictions.like("courseName", dto.getCourseName() + "%"));
-	            }
-	            if (dto.getDuration() != null && dto.getDuration().length() > 0) {
-	                criteria.add(Restrictions.like("duration", dto.getDuration()
-	                        + "%"));
-	            }
-	            if (dto.getDescription() != null && dto.getDescription().length() > 0) {
-	                criteria.add(Restrictions.like("description", dto.getDescription() + "%"));
-	            }
-	            
+			if (dto.getId() > 0) {
+				criteria.add(Restrictions.eq("id", dto.getId()));
+			}
+			if (dto.getCourseName() != null && dto.getCourseName().length() > 0) {
+				criteria.add(Restrictions.like("courseName", dto.getCourseName() + "%"));
+			}
+			if (dto.getDuration() != null && dto.getDuration().length() > 0) {
+				criteria.add(Restrictions.like("duration", dto.getDuration() + "%"));
+			}
+			if (dto.getDescription() != null && dto.getDescription().length() > 0) {
+				criteria.add(Restrictions.like("description", dto.getDescription() + "%"));
+			}
 
-	            // if page size is greater than zero the apply pagination
-	            if (pageSize > 0) {
-	                criteria.setFirstResult(((pageNo - 1) * pageSize));
-	                criteria.setMaxResults(pageSize);
-	            }
+			// if page size is greater than zero the apply pagination
+			if (pageSize > 0) {
+				criteria.setFirstResult(((pageNo - 1) * pageSize));
+				criteria.setMaxResults(pageSize);
+			}
 
-	            list = criteria.list();
-	        } catch (HibernateException e) {
-	            
-	            throw new ApplicationException("Exception in course search");
-	        } finally {
-	            session.close();
-	        }
+			list = criteria.list();
+		} catch (HibernateException e) {
 
-	       
-	        return list;
+			throw new ApplicationException("Exception in course search");
+		} finally {
+			session.close();
+		}
+
+		return list;
 	}
 
 }

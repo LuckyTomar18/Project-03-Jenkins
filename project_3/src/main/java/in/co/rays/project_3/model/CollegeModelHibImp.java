@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.JDBCConnectionException;
 
 import in.co.rays.project_3.dto.CollegeDTO;
 import in.co.rays.project_3.exception.ApplicationException;
@@ -80,10 +81,9 @@ public class CollegeModelHibImp implements CollegeModelInt {
 		try {
 			session = HibDataSource.getSession();
 			tx = session.beginTransaction();
-			
 
 			session.saveOrUpdate(dto);
-			
+
 			tx.commit();
 
 		} catch (HibernateException e) {
@@ -115,6 +115,8 @@ public class CollegeModelHibImp implements CollegeModelInt {
 			}
 			list = criteria.list();
 
+		} catch (JDBCConnectionException e) {
+			throw e;
 		} catch (HibernateException e) {
 
 			throw new ApplicationException("Exception : Exception in  College list");
@@ -167,21 +169,21 @@ public class CollegeModelHibImp implements CollegeModelInt {
 	}
 
 	public CollegeDTO findByPK(long pk) throws ApplicationException {
-		
+
 		Session session = null;
 		CollegeDTO dto = null;
 		try {
 			session = HibDataSource.getSession();
 
 			dto = (CollegeDTO) session.get(CollegeDTO.class, pk);
-			
+
 		} catch (HibernateException e) {
 
 			throw new ApplicationException("Exception : Exception in getting College by pk");
 		} finally {
 			session.close();
 		}
-		
+
 		return dto;
 	}
 

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.JDBCConnectionException;
 
 import in.co.rays.project_3.dto.BaseDTO;
 import in.co.rays.project_3.dto.TimetableDTO;
@@ -47,7 +48,11 @@ public class TimeTableCtl extends BaseCtl {
 			request.setAttribute("courseList", l);
 			request.setAttribute("subjectList", l1);
 
-		} catch (Exception e) {
+		}
+		catch (JDBCConnectionException e) {
+			ServletUtility.setErrorMessage("Database server down please check!!!", request);
+		}
+		catch (Exception e) {
 			log.error(e);
 		}
 	}
